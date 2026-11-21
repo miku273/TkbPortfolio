@@ -1,9 +1,11 @@
 
+
 name: Deploy Portfolio
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -23,6 +25,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Setup pnpm trước Setup Node
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -30,17 +38,12 @@ jobs:
           cache: pnpm
           cache-dependency-path: 'Portfolio Website/pnpm-lock.yaml'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
       - name: Install dependencies
-        working-directory: Portfolio Website
+        working-directory: 'Portfolio Website'
         run: pnpm install --frozen-lockfile
 
       - name: Build
-        working-directory: Portfolio Website
+        working-directory: 'Portfolio Website'
         run: pnpm run build
 
       - name: Setup Pages
